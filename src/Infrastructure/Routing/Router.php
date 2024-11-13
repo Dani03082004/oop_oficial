@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Infrastructure\Routing;
+use App\Infrastructure\Routing\Request;
 
 class Router{
     private array $routes=[];
@@ -10,7 +11,9 @@ class Router{
         return $this;
     }
 
-    function dispatch(string $method, string $path){
+    function dispatch(Request $request){
+        $method=$request->getMethod();
+        $path=$request->getPath();
         if(isset($this->routes[$method][$path])){
             call_user_func($this->routes[$method][$path]);
         } else{
@@ -19,10 +22,6 @@ class Router{
         }
     }
 
-    function run(){
-        $method=$_SERVER['REQUEST_METHOD'];
-        $path=$_SERVER['REQUEST_URI']['PATH'];
-        $this->dispatch($method,$path);
-    }
+
 
 }
